@@ -1,0 +1,96 @@
+extends layout
+
+block content
+	script.
+		$(document).ready(function() {
+			$("#goal_listing_table").tablesorter( {sortList: [[1,1]]} );
+			$('html, body').animate({ scrollTop: $("#scroll_to_here").offset().top - 50 }, 1000);
+		});
+
+	header#header.alt
+		h1#logo
+			| Bingo Analysis
+			br
+			span for The Legend of Zelda: Ocarina of Time
+			br
+			span#span_SRL
+				a(href='http://speedrunslive.com/tools/oot-bingo', target='_blank') speedrunslive.com/tools/oot-bingo
+		nav#nav
+			ul
+				li
+					a(href='/') Board Analysis
+				li.current
+					a(href='/goals') Goal Listing
+				li
+					a(href='/races') Race Listing
+				li
+					a(href='/leaderboard') Leaderboard
+				li
+					a(href='/news') News
+				li
+					a.icon.circle.fa-twitter(href='http://www.twitter.com/Zamiel_SRL', target='_blank')
+
+	article#main
+		br
+		h2#page_header
+			strong Goal Listing
+
+		section(style="padding: 0px 0px 50px 0px;")
+			.inner(style="height: 195px;")
+				h3(style="position: relative; bottom: 40px; line-height: 30px;")
+					strong
+						|Goal statistics are derived from &nbsp;
+						span(style="font-size: 1.5em;")
+							= numRaces
+						| &nbsp; races.
+						br
+						span(style="font-size: 0.8em;")
+							| (Starting from when bingo version #{bingoVersion.version} was released on #{bingoVersion.releaseDate}<span class="suffix">#{bingoVersion.releaseSuffix}</span>, #{bingoVersion.releaseYear}.)
+							br
+							br
+							| Times under 1:22:00 are considered "good" by the community.
+							br
+							| Click on the table headers to sort the table.
+
+		#scroll_to_here
+		section.wrapper.style4.container
+			.content
+				section.news
+					table#goal_listing_table
+						thead
+							tr(style="border-bottom: solid black 0.1em; font-weight: bold;")
+								th.table_hover_th(style="text-align: left;")
+									| Goal<br><br>
+									div(style="height: .5em;")
+									span(style="font-weight: normal; font-size: 0.8em;") (the name of the goal)
+								th.table_hover_th(style="text-align: left; width: 270px;", colspan=2)
+									| Under 1:22:00<br><br>
+									div(style="height: .5em;")
+									span(style="font-weight: normal; font-size: 0.8em;") (how often it appears on rows that finish in under 1:22:00)</span>
+								th.table_hover_th(style="text-align: left; width: 270px;", colspan=2)
+									| Under 1:22:00 and Won
+									div(style="height: .5em;")
+									span(style="font-weight: normal; font-size: 0.8em;") (how often it appears on rows that finish in under 1:22:00 and win the race)</span>
+								th.table_hover_th(style="text-align: left; width: 270px;", colspan=2)
+									| Attempts Under 1:22:00
+									div(style="height: .5em;")
+									span(style="font-weight: normal; font-size: 0.8em;") (how often players with 150+ ELO attempt it and get under 1:22:00)</span>
+								th.table_hover_th(style="text-align: left; width: 270px;", colspan=2)
+									| Attempts Under 1:22:00 and Won
+									div(style="height: .5em;")
+									span(style="font-weight: normal; font-size: 0.8em;") (how often players with 150+ ELO attempt it and win the race)</span>
+							tr.table_padding
+						tbody
+							each goal, i in goalHash
+								tr.table_hover
+									td #{goal.name}
+									- var goodPercent = Math.round(goal.goodPercent)
+									td #{goodPercent}%
+									td (#{goal.good} / #{goal.goodTotal})
+									- var wonPercent = Math.round(goal.wonPercent)
+									td #{wonPercent}%
+									td (#{goal.won} / #{goal.wonTotal})
+									td #{goal.attemptsGoodPercent}%
+									td (#{goal.attemptsGood} / #{goal.attemptsTotal})
+									td #{goal.attemptsWonPercent}%
+									td (#{goal.attemptsWon} / #{goal.attemptsTotal})

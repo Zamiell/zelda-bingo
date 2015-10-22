@@ -1,0 +1,205 @@
+extends layout
+
+block content
+	header#header.alt
+		h1#logo
+			| Bingo Analysis
+			br
+			span for The Legend of Zelda: Ocarina of Time
+			br
+			span#span_SRL
+				a(href='http://speedrunslive.com/tools/oot-bingo', target='_blank') speedrunslive.com/tools/oot-bingo
+		nav#nav
+			ul
+				li
+					a(href='/') Board Analysis
+				li
+					a(href='/goals') Goal Listing
+				li
+					a(href='/races') Race Listing
+				li
+					a(href='/leaderboard') Leaderboard
+				li.current
+					a(href='/news') News
+				li
+					a.icon.circle.fa-twitter(href='http://www.twitter.com/Zamiel_SRL', target='_blank')
+
+	article#main
+		br
+		h2#page_header
+			strong News
+
+		section.wrapper.style4.container
+			.content
+				section.news
+					header
+						h3 Sunday, March 8<span class="suffix">th</span>, 2015
+					ul
+						li Fixed the crappy font appearance for Windows users using Google Chrome (by <a href="http://stackoverflow.com/questions/14438368/prioritise-svg-font-with-google-web-fonts">forcing it to load the SVG verson of the font</a>).
+						li Fixed the "Current Races" part of the index page.
+						li Updated the site to work with v8.4 instead of v8.3. Also I backed up the v8.3 data and imported all of the v8.4 races. Sorry that this took so long! Part of the reason that I held off on doing this is that WTTH told me that there would be a v8.5 released relatively soon after v8.4 came out &mdash; but that didn't happen. Anyways, when I get around to it, I'll add a feature to show the top players for v8.3.
+						li Over the past few months, you might have noticed that the site frequently went down. This was because I was hosting this site off of my personal computer. I've migrated everything to <a href="http://heroku.com/">Heroku</a>, a free website hosting platform. (And the database is being hosted at <a href="https://mongolab.com">MongoLab</a>, a free database hosting platform.) Now, the site should stay online forever!
+					br
+
+					header
+						h3 Saturday, December 27<span class="suffix">th</span>, 2014
+					ul
+						li Version 8.4 of bingo came out so I have disabled the script that collects races. When I get some spare time, I will update the site to work with 8.4. 
+					br
+
+					header
+						h3 Sunday, November 23<span class="suffix">rd</span>, 2014
+					ul
+						li Changed the way the leaderboard works so that everyone's names are read in as lowercase letters. This is to fix a bug where Exodus' IRC nickname had changed from "Exodus" to "exodus" for certain races.
+					br
+
+					header
+						h3 Friday, November 14<span class="suffix">th</span>, 2014
+					ul
+						li Pruned out anti-bingos and double bingos from the database.
+						li Added some extra logic to the race import script that will stop it from automatically adding anti-bingos and double bingos.
+					br
+
+					header
+						h3 Monday, October 27<span class="suffix">th</span>, 2014
+					ul
+						li Added a button to see RBA synergy to the board analysis pages. Thanks to Mrbubbleskp for helping me classify the goals.
+						li Additionally, if this option is toggled on and a row has 3 or more RBA goals in it, the row will glow yellow. For an example of this, see <a href="/9">seed 9</a>.
+					br
+
+					header
+						h3 Sunday, October 26<span class="suffix">th</span>, 2014
+					ul
+						li Changed the wording on the Zelda's Lullaby explanation since it is generally faster to RBA ZL than to get it through Impa.
+						li Added "Both Lost Woods Heart Pieces" to the list of ZL goals.
+						li Removed "Defeat Dark Link" and "Longshot" from the list of ZL goals since it is reasonable to RBA the Water Temple keys in a bingo. Thanks to Mrbubbleskp for these changes!
+						li Changed the main page so that it will load before the SRL API call completes and added a nifty loading graphic.
+						li Changed the main page so that it will no longer show blackout, long, or short bingos.
+					br
+
+					header
+						h3 Saturday, October 25<span class="suffix">th</span>, 2014
+					ul
+						li Added a checkbox to disable goals requiring Zelda's Lullaby on the board analysis pages. This was a lot harder to do than I originally thought it was going to be.
+						li Fixed a bug with the automatic scrolling.
+					br
+
+					header
+						h3 Monday, October 13<span class="suffix">th</span>, 2014
+					ul
+						li Added a automatic scrolling feature to all of the pages on the site. Once the page loads, it should automatically scroll directly to the content.
+					br
+
+					header
+						h3 Sunday, October 12<span class="suffix">th</span>, 2014
+					ul
+						li Fixed the race listing and leaderboard pages for those with a small resolution.
+					br
+
+					header
+						h3 Friday, October 10<span class="suffix">th</span>, 2014
+					ul
+						li Fixed a bug where the site would not properly interpret a disqualification.
+					br
+
+					header
+						h3 Thursday, October 9<span class="suffix">th</span>, 2014
+					ul
+						li Fixed a bug that caused the race database not to be pruned.
+						li Fixed a bug with the attempts statistic where it mistakenly not counting some races.
+					br
+
+					header
+						h3 Thursday, October 2<span class="suffix">nd</span>, 2014
+					ul
+						li Fixed a bug in the logic that detects what row a player did.
+						li Per Gombill's request, I implemented "Attempts Under 1:22:00" and "Attempts Under 1:22:00 and Won" to the goal listing page. The idea is to track how often a goal screws up a row that one of the top players choose. Eventually, I will add these statistics to the normal board analysis pages (increasing the number of boards shown per page from 2 to 4). However, as you can see from the goal listing page, there isn't enough nearly enough data for it to be useful quite yet, so I will hold off for now.
+					br
+
+					header
+						h3 Wednesday, October 1<span class="suffix">st</span>, 2014
+					ul
+						li Added some extra logic to the race import script that will stop it from automatically adding short and long bingos.
+						li Added some extra logic to the race import script that will stop it from automatically adding races with only 1 entrant. (These are likely races that are in the middle of being edited by an SRL administrator. Thanks to Sluip for helping me figure this out.) 
+					br
+
+					header
+						h3 Tuesday, September 30<span class="suffix">th</span>, 2014
+					ul
+						li Added a "Hide players with under 10 races played" checkbox to the leaderboards. This is on by default in order to filter out the people who haven't done enough races to have meaningful statistics. Note that this is only visual and does not affect ELO calculation.
+						li Manually removed 2 blackout bingos from the database.
+						li Added some extra logic to the race import script that will stop it from automatically adding blackout bingos in the future.
+					br
+
+					header
+						h3 Monday, September 29<span class="suffix">th</span>, 2014
+					ul
+						li Fixed a bug with the month on the "Date of Last Race" on the leaderboard. (Thanks to PsyMarth for finding it.)
+						li For some reason, race #113465 only had 1 participant in the database. After I manually re-imported the race, the funky ELO bug with the NaN values went away, so that must have been the cause. (Thanks to Gombill for helping me diagnose the problem.)
+					br
+
+					header
+						h3 Tuesday, September 16<span class="suffix">th</span>, 2014
+					ul
+						li Added "Last ELO Change", "Date of Last Race", and "Average Time (Last 10 Races)" to the leaderboard.
+					br
+
+					header
+						h3 Monday, September 15<span class="suffix">th</span>, 2014
+					ul
+						li The site now is able to handle when a person types TL-BR/BL-TR backwards. (I'm looking at you, Runnerguy. =p)
+						li PsyMarth fixed a bug on the leaderboard where if a player tied for last place, they received more points than they were supposed to.
+					br
+
+					header
+						h3 Thursday, September 9<span class="suffix">th</span>, 2014
+					ul
+						li Fixed the goal listing and leaderboard tables for those with small resolutions.
+					br
+
+					header
+						h3 Wednesday, September 8<span class="suffix">th</span>, 2014
+					ul
+						li The leaderboard was originally programmed with "normal" 1v1 ELO. <a href="http://www.twitch.tv/PsyMarth">PsyMarth</a> helped me code a generalized ELO algorithm for multiple players (based on the math that <a href="http://sradack.blogspot.com/2008/06/elo-rating-system-multiple-players.html">Sradack outlines here</a>).
+						li However, with this new algorithm, the points generated per race was really low. As you can see in his explanation, Sradack divides both E (estimated score) and S (score) by (N(N - 1)) / 2 (where N is the number of participants in the race). PsyMarth suggested that in our implementation of the algorithm, we drop the N term. This means that we now divide E and S by just (N - 1) / 2.
+						li The effect of doing this is that it increases the maximum points you can get from a race from 2K / N to 2K.<br><span style="font-style: italic;">Proof: Let S = N - 1, E = 0. Then S - E = N - 1, and K * (S - E) = (2K / N(N - 1))(N - 1) = 2K / N.</span>
+					br
+
+					header
+						h3 Thursday, September 4<span class="suffix">th</span>, 2014
+					ul
+						li I added more statistics to the leaderboard.
+					br
+
+					header
+						h3 Wednesday, September 3<span class="suffix">rd</span>, 2014
+					ul
+						li Welcome to ZeldaBingo.com 2.0. The site was offline for a while, but I decided to get it back going.
+						li I redid the UI using a template from <a href="http://html5up.net" target="_new">HTML5 UP</a>. Now the site doesn't look like complete shit, which is a plus.
+						li SRL Bingo was updated to version 8.3 on August 20th, 2014, so I dumped all of the old v8.0 data and updated the code to make it work for v8.3.
+						li I already lowered the cutoff for a "good" time to 1:22:00 from 1:30:00. This is due to new discoveries such as quick-draw RBA and players getting better in general.
+						li I added a <a href="/leaderboard">bingo leaderboard</a>. This is better than using SRL points because it doesn't get altered by non-bingo OoT races.
+						li Behind the scenes, I rewrote everything in Javascript, using <a href="http://nodejs.org/" target="_new">Node.js</a> and <a href="http://expressjs.com/" target="_new">Express</a> for fun. This should also fix a few lingering bugs that the old site had. (Originally, the site was done in Perl, using the <a href="http://perldancer.org/" target="_new">Dancer</a> framework.)
+					br
+
+					header
+						h3 Monday, October 28<span class="suffix">th</span>, 2013
+					ul
+						li The "Board Analysis" section now displays two boards, incorporating the new race rinner data that I added to the database yesterday.
+					br
+
+					header
+						h3 Sunday, October 27<span class="suffix">th</span>, 2013
+					ul
+						li The "Bingo Analysis" section now calculates percentage based on the number of times it has actually appeared on boards. Before, I had it calculating from total races, which was a much worse way.
+						li Per Runnerguy's request, the "All Goals" section has been revamped to include "Under 1.5 Hour Ratio", "Win Percentage", and "Win Ratio".
+						li I added the "Race Listing" section for fun. This should give you further insight into the data, if you wish it.
+						li Fixed various bugs around the site and corrected a bug in the database that was making the percentages calculate wrong.
+					br
+
+					header
+						h3 Saturday, October 5<span class="suffix">th</span>, 2013
+					ul
+						li Welcome to ZeldaBingo.com. I put the site up around a week ago, but I haven't bothered adding a news page until now. It is based on Runnerguy's bingo Excel spreadsheet.
+						li <a href="http://www.twitch.tv/runnerguy2489">Runnerguy</a> requested the "All Goals" section, so I've added that in.
+						li Feedback would be welcome; you can <a href="http://www.twitch.tv/message/compose?to=zamiell" target="_new">PM me on Twitch</a>.

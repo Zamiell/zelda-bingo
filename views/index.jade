@@ -1,0 +1,91 @@
+extends layout
+
+block content
+	script.
+		function sleep(millis) {
+			setTimeout(function() {
+				$('#input_seed').focus();
+			}, millis);
+		}
+		$(document).ready(function() {
+			sleep(0);
+			$.getJSON('http://api.speedrunslive.com/races', function(data) {
+				var racesCurrentlyGoing = 0;
+				for (var i = 0; i < data.races.length; i++) {
+					/* Skip the race if it is not an OoT race or if the race has already completed */
+					if (data.races[i].game.abbrev !== 'oot' || data.races[i].statetext === 'Complete') {
+						continue;
+					}
+					if (/speedrunslive\.com\/tools\/oot-bingo\/.*seed=\d+/.test(data.races[i].goal)) {
+						if (/blackout/i.test(data.races[i].goal)) {
+							continue; /* Skip blackout bingos */
+						} else if (/short/i.test(data.races[i].goal)) {
+							continue; /* Skip short bingos */
+						} else if (/long/i.test(data.races[i].goal)) {
+							continue; /* Skip long bingos */
+						}
+						racesCurrentlyGoing = 1;
+						var seed = data.races[i].goal.match(/speedrunslive\.com\/tools\/oot-bingo\/.*seed=(\d+)/)[1];
+						var playersString = '';
+						if (data.races[i].numentrants > 0) {
+							$.each(data.races[i].entrants, function(key, value) {
+								playersString += key + ', ';
+						});
+						}
+						if (playersString !== '') {
+							playersString = ' - ' + playersString;
+							playersString = playersString.substring(0, playersString.length - 2); /* Chop off the last comma and space */
+						}
+						$("<li><a href='/" + seed + "'>" + seed + "</a>" + playersString + "</li>").appendTo("#current_races");
+					}
+				}
+				$('#ajaxgif').hide();
+				if (racesCurrentlyGoing == 1) {
+					$('#current_races').fadeIn();
+				} else {
+					$('#no_current_races').fadeIn();
+				}
+			});
+		});
+
+	header#header.alt
+		h1#logo
+			| Bingo Analysis
+			br
+			span for The Legend of Zelda: Ocarina of Time
+			br
+			span#span_SRL
+				a(href='http://speedrunslive.com/tools/oot-bingo', target='_blank') speedrunslive.com/tools/oot-bingo
+		nav#nav
+			ul
+				li.current
+					a(href='/') Board Analysis
+				li
+					a(href='/goals') Goal Listing
+				li
+					a(href='/races') Race Listing
+				li
+					a(href='/leaderboard') Leaderboard
+				li
+					a(href='/news') News
+				li
+					a.icon.circle.fa-twitter(href='http://www.twitter.com/Zamiel_SRL', target='_blank')
+
+	section#banner
+		.inner
+			h4 Zamiel's
+			header
+				h2 Bingo Analysis
+			br
+			br
+			p#p_enter_a_seed Enter a seed:
+			br
+			form(method='post')
+				input#input_seed(type='text', name='seed')
+			br
+			br
+			p Or, select a current race:
+			p(style='line-height: .5em;') &nbsp;
+			#ajaxgif <img src="/images/ajax-loader.gif" style="position: relative; top: 10px;">
+			p#no_current_races(style="display: none; color: #B8B8B8; font-size: 0.8em;") [No current OoT bingo races detected on SRL.]
+			p#current_races(style="display: none; font-size: 0.8em;")

@@ -1,0 +1,142 @@
+extends layout
+
+block content
+	script.
+		$(document).ready(function() {
+			/* Sort by rank; use "Total Races Played" as a tiebreaker */
+			$("#leaderboard_table_all").tablesorter({
+				sortList: [[0, 0], [5, 1]]
+			});
+			$("#leaderboard_table_10OrMore").tablesorter({
+				sortList: [[0, 0], [5, 1]]
+			});
+			$('html, body').animate({ scrollTop: $("#scroll_to_here").offset().top - 50 }, 1000);
+		});
+		function switchTable() {
+			var item1 = document.getElementById("leaderboard_span_all");
+			var item2 = document.getElementById("leaderboard_span_10OrMore");
+			if (document.getElementById("checkbox").checked) {
+				item1.style.display = 'none';
+				item2.style.display = 'inline';
+			} else {
+				item1.style.display = 'inline';
+				item2.style.display = 'none';
+			}
+		}
+
+	header#header.alt
+		h1#logo
+			| Bingo Analysis
+			br
+			span for The Legend of Zelda: Ocarina of Time
+			br
+			span#span_SRL
+				a(href='http://speedrunslive.com/tools/oot-bingo', target='_blank') speedrunslive.com/tools/oot-bingo
+		nav#nav
+			ul
+				li
+					a(href='/') Board Analysis
+				li
+					a(href='/goals') Goal Listing
+				li
+					a(href='/races') Race Listing
+				li.current
+					a(href='/leaderboard') Leaderboard
+				li
+					a(href='/news') News
+				li
+					a.icon.circle.fa-twitter(href='http://www.twitter.com/Zamiel_SRL', target='_blank')
+
+	article#main
+		br
+		h2#page_header
+			strong Leaderboard
+
+		section(style="padding: 0px 0px 50px 0px;")
+			.inner(style="height: 400px;")
+				h3(style="position: relative; bottom: 40px; line-height: 30px;")
+					strong
+						|Currently tracking &nbsp;
+						span(style="font-size: 1.5em;")
+							- var j = 0
+							each player, i in playerList
+								- j++
+							= j
+						| &nbsp; players.
+						br
+						span(style="font-size: 0.8em;")
+							| (Starting from when bingo version #{bingoVersion.version} was released on #{bingoVersion.releaseDate}<span class="suffix">#{bingoVersion.releaseSuffix}</span>, #{bingoVersion.releaseYear}.)
+							br
+							br
+							| Click on the table headers to sort the table.
+							br
+							br
+							input(type="checkbox", id="checkbox", class="css-checkbox", onclick="switchTable();", checked)
+							label(for="checkbox", class="css-label") &nbsp; Hide players with under 10 races played
+							br
+							br
+							span.span_info ELO is a player's skill rating (which is not based on SRL points).<br>A positive number means above average skill.<br>A negative number means below average skill.<br><br>(The math used is from <a href="http://sradack.blogspot.com/2008/06/elo-rating-system-multiple-players.html" target="_new">Sradack's implementation</a> of the ELO rating system for multiple players.)
+
+		#scroll_to_here
+		section.wrapper.style4.container(style="width: 90%;")
+			.content
+				section.news
+					each val in [1, 2]
+						if val == 1
+							- var displayVar = "none"
+							- var spanIDVar = "leaderboard_span_all"
+							- var tableIDVar = "leaderboard_table_all"
+							- var listVar = playerList
+						else if val == 2
+							- var displayVar = "inline"
+							- var spanIDVar = "leaderboard_span_10OrMore"
+							- var tableIDVar = "leaderboard_table_10OrMore"
+							- var listVar = playerList2
+
+						span(style="display: #{displayVar};", id="#{spanIDVar}")
+							table.leaderboard_table(id="#{tableIDVar}")
+								thead
+									tr(style="border-bottom: solid black 0.1em; font-weight: bold;")
+										th.table_hover_th(style="text-align: right;") Rank
+										th.table_hover_th(style="text-align: left;") Player
+										th.table_hover_th(style="text-align: right;") ELO
+										th.table_hover_th(style="text-align: right;") Last ELO Change
+										th.table_hover_th(style="text-align: right;") Date of Last Race
+										th.table_hover_th(style="text-align: right;") Total Races Played
+										th.table_hover_th(style="text-align: left;", colspan=2) Races Under 1:22:00
+										th.table_hover_th(style="text-align: left; width: 130px;", colspan=2) Races Under 1:22:00 and Won
+										th.table_hover_th(style="text-align: right;") Lowest Time
+										th.table_hover_th(style="text-align: right;") Average Time<br/>(Last 10 Races)
+										th.table_hover_th(style="text-align: right;") Average Time<br/>(All)
+									tr.table_padding
+								tbody
+									each player, i in listVar
+										tr.table_hover
+											td(style="text-align: right;")
+												= player.rank
+											td
+												= i
+											td(style="text-align: right;")
+												= player.ELO
+											td(style="text-align: right;")
+												= player.ELOChange
+											td(style="text-align: right;")
+												= player.dateOfLastRace
+											td(style="text-align: right;")
+												= player.totalRaces
+											td(style="text-align: right;")
+												= player.totalGoodRaces
+											td(style="text-align: left;")
+												- var goodRacesPercent = Math.round(player.totalGoodRaces / player.totalRaces * 100)
+												| (#{goodRacesPercent}%)
+											td(style="text-align: right;")
+												= player.totalGoodWonRaces
+											td(style="text-align: left;")
+												- var goodWinRacesPercent = Math.round(player.totalGoodWonRaces / player.totalRaces * 100)
+												| (#{goodWinRacesPercent}%)
+											td(style="text-align: right;")
+												= player.lowestTime
+											td(style="text-align: right;")
+												= player.averageTime10
+											td(style="text-align: right;")
+												= player.averageTime

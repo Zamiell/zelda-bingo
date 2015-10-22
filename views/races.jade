@@ -1,0 +1,105 @@
+extends layout
+
+block content
+	script.
+		$(document).ready(function() {
+			$('html, body').animate({ scrollTop: $("#scroll_to_here").offset().top - 50 }, 1000);
+		});
+
+	header#header.alt
+		h1#logo
+			| Bingo Analysis
+			br
+			span for The Legend of Zelda: Ocarina of Time
+			br
+			span#span_SRL
+				a(href='http://speedrunslive.com/tools/oot-bingo', target='_blank') speedrunslive.com/tools/oot-bingo
+		nav#nav
+			ul
+				li
+					a(href='/') Board Analysis
+				li
+					a(href='/goals') Goal Listing
+				li.current
+					a(href='/races') Race Listing
+				li
+					a(href='/leaderboard') Leaderboard
+				li
+					a(href='/news') News
+				li
+					a.icon.circle.fa-twitter(href='http://www.twitter.com/Zamiel_SRL', target='_blank')
+
+	article#main
+		br
+		h2#page_header
+			strong Race Listing
+
+		section(style="padding: 0px 0px 50px 0px;")
+			.inner(style="height: 165px;")
+				h3(style="position: relative; bottom: 40px; line-height: 30px;")
+					strong
+						|Currently tracking &nbsp;
+						span(style="font-size: 1.5em;")
+							= raceList.length
+						| &nbsp; races.
+						br
+						span(style="font-size: 0.8em;")
+							| (Starting from when bingo version #{bingoVersion.version} was released on #{bingoVersion.releaseDate}<span class="suffix">#{bingoVersion.releaseSuffix}</span>, #{bingoVersion.releaseYear}.)
+							br
+							br
+							| Times under 1:22:00 are considered "good" by the community and are highlighted in red.
+
+		#scroll_to_here
+		section.wrapper.style4.container(style="width: 90%;")
+			.content
+				section.news
+					table#race_listing_table
+						thead
+							tr(style="font-weight: bold;")
+								th(style="text-align: right;") ID
+								th(style="text-align: right;") Seed
+								th(style="text-align: left; width: 210px;") Date & Time
+								th Place
+								th(style="text-align: left;") Name
+								th(style="text-align: right;") Time
+								th(style="text-align: left;") Comment
+							tr.table_padding
+								td(style="border-bottom: 1px solid black;", colspan=7)
+						tbody
+							tr.table_padding
+							each race, i in raceList
+								tr.table_hover
+									td(style="text-align: right; background: white;", rowspan=race.numEntrants)
+										= race.id
+									td(style="text-align: right; background: white;", rowspan=race.numEntrants)
+										a(href='/' + race.seed)= race.seed
+									td(style="background: white;", rowspan=race.numEntrants)
+										= race.day
+										br
+										= race.date
+										br
+										= race.time
+									- var good_time_variable = (race.results[0].race === 1 ? 'good_time' : '')
+									td(class=good_time_variable, style="text-align: right;")
+										= race.results[0].place
+									td(class=good_time_variable)
+										= race.results[0].player
+									td(class=good_time_variable, style="text-align: right;")
+										= race.results[0].time
+									td(class=good_time_variable)
+										= race.results[0].message
+								each result, j in race.results
+									if j != 0
+										- var good_time_variable = (result.race === 1 ? 'good_time' : '')
+										tr.table_hover
+											td(class=good_time_variable, style="text-align: right;")
+												= result.place
+											td(class=good_time_variable)
+												= result.player
+											td(class=good_time_variable, style="text-align: right;")
+												= result.time
+											td(class=good_time_variable)
+												= result.message
+								tr.table_padding
+									td(style="border-bottom: 1px solid black;", colspan=7)
+								tr.table_padding
