@@ -5,8 +5,8 @@ var logger       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var mongo        = require('mongodb');
-var db_username  = process.env.DB_USER;
-var db_password  = process.env.DB_USER;
+var db_username  = process.env.DB_USERNAME;
+var db_password  = process.env.DB_PASSWORD;
 var db           = require('monk')(db_username + ':' + db_password + '@ds033217.mongolab.com:33217/zelda-bingo');
 
 var routes = require('./routes/index');
